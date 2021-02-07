@@ -1,0 +1,47 @@
+name: MSA-patents
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - _libgcc_mutex=0.1=main
+  - ca-certificates=2021.1.19=h06a4308_0
+  - certifi=2020.12.5=py39h06a4308_0
+  - ld_impl_linux-64=2.33.1=h53a641e_7
+  - libedit=3.1.20191231=h14c3975_1
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.1.0=hdf63c60_0
+  - libstdcxx-ng=9.1.0=hdf63c60_0
+  - ncurses=6.2=he6710b0_1
+  - openssl=1.1.1i=h27cfd23_0
+  - pip=20.3.3=py39h06a4308_0
+  - python=3.9.0=hdb3f193_2
+  - readline=8.1=h27cfd23_0
+  - setuptools=52.0.0=py39h06a4308_0
+  - sqlite=3.33.0=h62c20be_0
+  - tk=8.6.10=hbc83047_0
+  - tzdata=2020f=h52ac0ba_0
+  - wheel=0.36.2=pyhd3eb1b0_0
+  - xz=5.2.5=h7b6447c_0
+  - zlib=1.2.11=h7b6447c_3
+  - pip:
+    - attrs==20.3.0
+    - chardet==4.0.0
+    - click==7.1.2
+    - click-plugins==1.1.1
+    - cligj==0.7.1
+    - fiona==1.8.18
+    - geopandas==0.8.2
+    - idna==2.10
+    - munch==2.5.0
+    - numpy==1.20.0
+    - pandas==1.2.1
+    - pygeos==0.9
+    - pyproj==3.0.0.post1
+    - python-dateutil==2.8.1
+    - pytz==2021.1
+    - requests==2.25.1
+    - shapely==1.7.1
+    - six==1.15.0
+    - tabulate==0.8.7
+    - tqdm==4.56.0
+    - urllib3==1.26.3
