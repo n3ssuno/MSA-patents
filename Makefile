@@ -12,6 +12,8 @@ SHELL = bash
 
 .PHONY: all make_patent_database make_citation_database make_readme
 
+.DEFAULT_GOAL:= all
+
 #################################################
 
 DATA_DIR = data
