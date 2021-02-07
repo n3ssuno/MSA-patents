@@ -59,6 +59,7 @@ MSA-patents
 ```
 
 ## Tables structure
+The following tables describe the database files, showing the first five rows of each.
 
 ### msa_patent
 |   patent_id |   cbsa_id |   cbsa_share |
