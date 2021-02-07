@@ -102,7 +102,8 @@ def main():
 
     df_patent_inventor = pd.read_table(
         args.input_list[2], # patent_inventor.tsv.zip
-        dtype=str)
+        dtype=str) \
+        .dropna()
 
     df_patent = pd.merge(df_patent, df_patent_inventor)
     del df_patent_inventor
