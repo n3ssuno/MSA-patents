@@ -3,3 +3,4 @@ __pycache__/
 .vscode
 makefile2graph/
 docs/README_tables.md
+README.pdf
