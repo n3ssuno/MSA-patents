@@ -35,6 +35,16 @@ def main():
                     tablefmt='github')
             f_out.write(f'### {file.split(".")[0]}\n')
             f_out.write(readme_table)
+            if file=='msa_patent_info.tsv.zip':
+                frac_no_uspc = df[df.uspc_class.isna()] \
+                    .patent_id.nunique()/df.patent_id.nunique()
+                f_out.write((
+                    '\n\nNotes:\n'
+                    '* Rename *patent_id* as *forward_citation_id* '
+                    'to merge this table with the *msa_citation* table.\n'
+                    f'* {frac_no_uspc:.1%} '
+                    'of the *patent_id*s have no *uspc_class* '
+                    '(most of which, very old or very recent patents).'))
             f_out.write('\n\n\n')
 
 

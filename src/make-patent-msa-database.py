@@ -15,6 +15,7 @@ Date: 2021-02-06
 """
 
 
+from matplotlib import use
 import pandas as pd
 import os
 from parse_args import parse_io
@@ -23,30 +24,32 @@ from parse_args import parse_io
 def main():
     args = parse_io()
 
-    df_patent = pd.read_table(args.input)
+    df_patent = pd.read_table(
+        args.input,
+        usecols=[
+            'patent_id', 
+            'inventor_id', 
+            'inventor_share',
+            'cbsa_id']) \
+        .drop_duplicates()
 
     dir, file = os.path.split(args.output)
     if not os.path.exists(dir):
         os.makedirs(dir)
 
-    df_patent[[
-        'patent_id', 
-        'inventor_id', 
-        'inventor_share',
-        'cbsa_id']] \
-    .drop_duplicates() \
-    .drop(columns='inventor_id') \
-    .groupby(['patent_id','cbsa_id'], as_index=False) \
-    .agg({
-        'inventor_share':'sum'}) \
-    .rename(columns={'inventor_share':'cbsa_share'}) \
-    .to_csv(
-        args.output, 
-        sep='\t', 
-        index=False, 
-        compression={
-            'method':'zip',
-            'archive_name':file.replace('.zip','')})
+    df_patent \
+        .drop(columns='inventor_id') \
+        .groupby(['patent_id','cbsa_id'], as_index=False) \
+        .agg({
+            'inventor_share':'sum'}) \
+        .rename(columns={'inventor_share':'cbsa_share'}) \
+        .to_csv(
+            args.output, 
+            sep='\t', 
+            index=False, 
+            compression={
+                'method':'zip',
+                'archive_name':file.replace('.zip','')})
 
 
 if __name__ == '__main__':

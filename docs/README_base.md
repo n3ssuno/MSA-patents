@@ -1,6 +1,12 @@
 # Patenting in the US Metropolitan Areas
 This repository builds a database that collects information about the US patent applications developed by inventors located in Metropolitan Statistical Areas (MSA).
 
+The data are aggregated at the Core Based Statistical Area (CBSA) level, based on the localization (latitude and longitude) of each inventor, as provided by PatentsView. The boundaries of each CBSA are constant over time and based on the data provided by the US Census (version 2019). To each inventor, within a patent, is assigned a fraction of the patent proportional to the size of the "inventing team". As well, a fractional count of the inventors of each patent, located in a given metropolitan area, is provided.
+
+Moreover, for each patent (partly) invented in a metropolitan area, the forward citations received by the patent are provided.
+
+Lastly, of each of these patents (and citing patents), the application and publication dates, the number of claims, and the main USPC patent class are reported.
+
 ## Reproducibility
 To reproduce the database tables, please follow these steps:
 1. Install [Git](https://git-scm.com/)
@@ -35,7 +41,7 @@ Otherwise, please fork the repository, modify the code as you think is the best,
 ### Database
 The database is released under a [*CC-BY 4.0 License*](https://creativecommons.org/licenses/by/4.0/).
 
-The raw data, elaborted by the scripts contained in this repository, are from [PatentsView](https://www.patentsview.org/) and [US Census](https://www.census.gov/). You can find further references to the raw files used in the Makefile file.
+The raw data, elaborted by the scripts contained in this repository, are from [PatentsView](https://www.patentsview.org/), the [US Census](https://www.census.gov/), and the USPTO's [Patent Examination Research Dataset (PatEx)](https://www.uspto.gov/learning-and-resources/electronic-data-products/patent-examination-research-dataset-public-pair). You can find further references to the raw files used in the Makefile file.
 
 ## Folders structure
 ```

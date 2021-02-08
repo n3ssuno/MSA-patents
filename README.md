@@ -1,6 +1,12 @@
 # Patenting in the US Metropolitan Areas
 This repository builds a database that collects information about the US patent applications developed by inventors located in Metropolitan Statistical Areas (MSA).
 
+The data are aggregated at the Core Based Statistical Area (CBSA) level, based on the localization (latitude and longitude) of each inventor, as provided by PatentsView. The boundaries of each CBSA are constant over time and based on the data provided by the US Census (version 2019). To each inventor, within a patent, is assigned a fraction of the patent proportional to the size of the "inventing team". As well, a fractional count of the inventors of each patent, located in a given metropolitan area, is provided.
+
+Moreover, for each patent (partly) invented in a metropolitan area, the forward citations received by the patent are provided.
+
+Lastly, of each of these patents (and citing patents), the application and publication dates, the number of claims, and the main USPC patent class are reported.
+
 ## Reproducibility
 To reproduce the database tables, please follow these steps:
 1. Install [Git](https://git-scm.com/)
@@ -35,7 +41,7 @@ Otherwise, please fork the repository, modify the code as you think is the best,
 ### Database
 The database is released under a [*CC-BY 4.0 License*](https://creativecommons.org/licenses/by/4.0/).
 
-The raw data, elaborted by the scripts contained in this repository, are from [PatentsView](https://www.patentsview.org/) and [US Census](https://www.census.gov/). You can find further references to the raw files used in the Makefile file.
+The raw data, elaborted by the scripts contained in this repository, are from [PatentsView](https://www.patentsview.org/), the [US Census](https://www.census.gov/), and the USPTO's [Patent Examination Research Dataset (PatEx)](https://www.uspto.gov/learning-and-resources/electronic-data-products/patent-examination-research-dataset-public-pair). You can find further references to the raw files used in the Makefile file.
 
 ## Folders structure
 ```
@@ -74,31 +80,35 @@ The following tables describe the database files, showing the first five rows of
 ### msa_patent_inventor
 |   patent_id | inventor_id   |   inventor_share |
 |-------------|---------------|------------------|
-|    10000000 | 5073021-1     |              1   |
-|    10000007 | 9473749-3     |              0.2 |
-|    10000007 | 9862137-3     |              0.2 |
-|    10000007 | 9862137-4     |              0.2 |
-|    10000007 | 9862137-5     |              0.2 |
+|    10000000 | 5073021-1     |         1        |
+|    10003756 | 10003756-2    |         0.5      |
+|    10003780 | 9495415-4     |         0.2      |
+|    10006993 | 5763054-3     |         1        |
+|    10007786 | 6067410-1     |         0.333333 |
 
 
 ### msa_patent_info
-|   patent_id | grant_date   | appln_date   |   num_claims |
-|-------------|--------------|--------------|--------------|
-|    10000000 | 2018-06-19   | 2015-03-10   |           20 |
-|    10000007 | 2018-06-19   | 2016-06-10   |           24 |
-|    10000008 | 2018-06-19   | 2014-12-01   |           11 |
-|    10000009 | 2018-06-19   | 2015-02-05   |           21 |
-|    10000010 | 2018-06-19   | 2016-06-29   |           20 |
+|   patent_id | grant_date   | appln_date   |   num_claims |   uspc_class |
+|-------------|--------------|--------------|--------------|--------------|
+|    10000000 | 2018-06-19   | 2015-03-10   |           20 |          356 |
+|    10000002 | 2018-06-19   | 2014-12-30   |            9 |          428 |
+|    10000003 | 2018-06-19   | 2013-03-12   |           18 |          156 |
+|    10000004 | 2018-06-19   | 2015-12-17   |            6 |          428 |
+|    10000005 | 2018-06-19   | 2012-08-03   |            4 |          156 |
+
+Notes:
+* Rename *patent_id* as *forward_citation_id* to merge this table with the *msa_citation* table.
+* 5.4% of the *patent_id*s have no *uspc_class* (most of which, very old or very recent patents).
 
 
 ### msa_label
-|   cbsa_id |   csa_id | cbsa_label                            |
-|-----------|----------|---------------------------------------|
-|     31080 |      348 | Los Angeles-Long Beach-Anaheim, CA    |
-|     33340 |      376 | Milwaukee-Waukesha-West Allis, WI     |
-|     35620 |      408 | New York-Newark-Jersey City, NY-NJ-PA |
-|     41860 |      488 | San Francisco-Oakland-Hayward, CA     |
-|     40380 |      464 | Rochester, NY                         |
+|   csa_id |   cbsa_id | cbsa_label                            |
+|----------|-----------|---------------------------------------|
+|      348 |     31080 | Los Angeles-Long Beach-Anaheim, CA    |
+|      376 |     33340 | Milwaukee-Waukesha, WI                |
+|      408 |     35620 | New York-Newark-Jersey City, NY-NJ-PA |
+|      488 |     41860 | San Francisco-Oakland-Berkeley, CA    |
+|      464 |     40380 | Rochester, NY                         |
 
 
 ### msa_citation

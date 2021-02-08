@@ -25,18 +25,17 @@ def main():
 
     df_patent = pd.read_table(
         args.input,
-        dtype=str)
+        usecols=[
+            'cbsa_id', 
+            'csa_id', 
+            'cbsa_label']) \
+        .drop_duplicates()
 
     dir, file = os.path.split(args.output)
     if not os.path.exists(dir):
         os.makedirs(dir)
 
-    df_patent[[
-        'cbsa_id', 
-        'csa_id', 
-        'cbsa_label']] \
-    .drop_duplicates() \
-    .to_csv(
+    df_patent.to_csv(
         args.output, 
         sep='\t', 
         index=False, 
