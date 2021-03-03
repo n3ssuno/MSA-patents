@@ -15,7 +15,6 @@ Date: 2021-02-06
 """
 
 
-from matplotlib import use
 import pandas as pd
 import os
 from parse_args import parse_io

@@ -27,15 +27,25 @@ def main():
     with open(args.output, 'w') as f_out:
         for f_in in args.input_list:
             dir, file = os.path.split(f_in)
-            df = pd.read_table(f_in, dtype=str)
+            df = pd.read_table(
+                f_in, 
+                dtype=str, 
+                nrows=5)
             readme_table = df \
-                .head() \
                 .to_markdown(
                     index=False, 
                     tablefmt='github')
             f_out.write(f'### {file.split(".")[0]}\n')
             f_out.write(readme_table)
             if file=='msa_patent_info.tsv.zip':
+                df = pd.read_table(
+                    f_in,
+                    usecols=[
+                        'patent_id',
+                        'uspc_class'],
+                    dtype={
+                        'patent_id':int,
+                        'uspc_class':str})
                 frac_no_uspc = df[df.uspc_class.isna()] \
                     .patent_id.nunique()/df.patent_id.nunique()
                 f_out.write((

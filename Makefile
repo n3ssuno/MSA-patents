@@ -33,7 +33,7 @@ DOCS_DIR = docs
 #################################################
 
 USPTO_URL = https://s3.amazonaws.com/data.patentsview.org/20200929/download
-USPTO_FILES = patent.tsv.zip application.tsv.zip patent_inventor.tsv.zip location.tsv.zip uspatentcitation.tsv.zip
+USPTO_FILES = patent.tsv.zip application.tsv.zip patent_inventor.tsv.zip location.tsv.zip cpc_current.tsv.zip uspatentcitation.tsv.zip
 USPTO_TARGETS := $(foreach F,$(USPTO_FILES),$(DATA_DIR_USPTO)/$F)
 
 $(USPTO_TARGETS): $(DATA_DIR_USPTO)/%: $(SCRIPT_DIR)/download.py
@@ -70,10 +70,13 @@ $(DATA_DIR_PROC)/msa_label.tsv.zip: $(SCRIPT_DIR)/make-msa-label-database.py $(D
 $(DATA_DIR_PROC)/msa_citation.tsv.zip: $(SCRIPT_DIR)/make-citation-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DATA_DIR_PROC)/msa_patent_info.tsv.zip: $(SCRIPT_DIR)/make-patent-info-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip
+$(DATA_DIR_PROC)/msa_patent_info.tsv.zip: $(SCRIPT_DIR)/make-patent-info-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DOCS_DIR)/README_tables.md: $(SCRIPT_DIR)/make-readme-tables.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_patent_inventor.tsv.zip $(DATA_DIR_PROC)/msa_patent_info.tsv.zip $(DATA_DIR_PROC)/msa_label.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip
+$(DATA_DIR_PROC)/msa_patent_cpc.tsv.zip: $(SCRIPT_DIR)/make-cpc-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/cpc_current.tsv.zip
+	python $< -I $(filter-out $<,$^) -o $@
+
+$(DOCS_DIR)/README_tables.md: $(SCRIPT_DIR)/make-readme-tables.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_patent_inventor.tsv.zip $(DATA_DIR_PROC)/msa_patent_info.tsv.zip $(DATA_DIR_PROC)/msa_label.tsv.zip $(DATA_DIR_PROC)/msa_patent_cpc.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 README.md: $(DOCS_DIR)/README_base.md $(DOCS_DIR)/README_tables.md
 	awk '{print}' $^ > $@
@@ -81,19 +84,19 @@ README.md: $(DOCS_DIR)/README_base.md $(DOCS_DIR)/README_tables.md
 #################################################
 
 #- all                       Reproduce all the steps of the project
-all: make_patent_database make_citation_database make_readme
+all: patent_database citation_database readme
 
-#- download_data             Download needed raw data
-download_data: $(USPTO_TARGETS) $(SHP_TARGETS)
+#- raw_data                  Download needed raw data
+raw_data: $(USPTO_TARGETS) $(SHP_TARGETS)
 
-#- make_patent_database      Make base tables
-make_patent_database: $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_patent_inventor.tsv.zip $(DATA_DIR_PROC)/msa_patent_info.tsv.zip $(DATA_DIR_PROC)/msa_label.tsv.zip
+#- patent_database           Make base tables
+patent_database: $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_patent_inventor.tsv.zip $(DATA_DIR_PROC)/msa_patent_info.tsv.zip $(DATA_DIR_PROC)/msa_label.tsv.zip
 
-#- make_citation_database    Make patent-citation table
-make_citation_database: $(DATA_DIR_PROC)/msa_citation.tsv.zip
+#- citation_database         Make patent-citation table
+citation_database: $(DATA_DIR_PROC)/msa_citation.tsv.zip
 
-#- make_readme               Make README file
-make_readme: README.md
+#- readme                    Make README file
+readme: README.md
 
 #################################################
 

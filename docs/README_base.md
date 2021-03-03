@@ -3,9 +3,16 @@ This repository builds a database that collects information about the US patent 
 
 The data are aggregated at the Core Based Statistical Area (CBSA) level, based on the localization (latitude and longitude) of each inventor, as provided by PatentsView. The boundaries of each CBSA are constant over time and based on the data provided by the US Census (version 2019). To each inventor, within a patent, is assigned a fraction of the patent proportional to the size of the "inventing team". As well, a fractional count of the inventors of each patent, located in a given metropolitan area, is provided.
 
-Moreover, for each patent (partly) invented in a metropolitan area, the forward citations received by the patent are provided.
+For each patent (partly) invented in a metropolitan area, the forward citations received by the patent are provided.
 
-Lastly, of each of these patents (and citing patents), the application and publication dates, the number of claims, and the main USPC patent class are reported.
+Of each of these patents (and citing patents), the application and publication dates, the main USPC patent class, the number of claims, and the number of citations received (*forward citations*) by other US patents (in the 5 or 10 years from the granting date) are reported.<br>
+To account for possible time- and technology-related shocks, the average number of claims and forward citations of patents belonging to the same USPC class and applied (or granted) in the same year of the focal patent are provided.<br>
+About this last poing, note that, for patents with no USPC class, the averages reported are computed considering any patent applied (or granted) in the same year of the focal patent.
+
+Moreover, of each of these patents (and citing patents) the CPC *subclass* (4 digits class) are reported.<br>
+About the CPC classes, some notes need to be taken into consideration:
+* The *cpc_class_count* column counts the number of *main groups* (7 digits class) of the CPC *subclass* that appear in that patent. E.g., this means that, if a patent is classified into the *main groups* ``A01B1``, ``A01B3``, and ``A01B5``, the table will report, for the given patent, ``A01B`` in the *cpc_class* columns and ``3`` in the *cpc_class_count*.
+* The *Y section* and the *2000 series* are not considered in the table.
 
 ## Reproducibility
 To reproduce the database tables, please follow these steps:
@@ -19,9 +26,10 @@ To reproduce the database tables, please follow these steps:
 8. Run ``make``
 
 Notes:
-1. The previous steps assume that you are working in a GNU/Linux environment (if you work in a MS Windows environment, consider using [WSL](https://docs.microsoft.com/en-us/windows/wsl/)). It is not excluded that you can run the scripts also in other OS, but it has never been tested.
-2. GNU Make is not mandatory, but it helps to simplify the procedure. Alternatively, you can go step by step by yourself following the Makefile provided (the ``makefile.png`` image can help).
-3. The ``make2graph`` rule in the Makefile depicts the Makefile as a PNG picture. To use this rule, you must (1) clone the https://github.com/lindenb/makefile2graph repository into the present folder; (2) compile it with ``make``; (3) install [Graphviz](http://www.graphviz.org/) into your OS.
+1. To run some of the scripts you need a large amount of RAM memory (about 32GB). Consider using a cloud-based solution.
+2. The previous steps assume that you are working in a GNU/Linux environment (if you work in a MS Windows environment, consider using [WSL](https://docs.microsoft.com/en-us/windows/wsl/)). It is not excluded that you can run the scripts also in other OS, but it has never been tested.
+3. GNU Make is not mandatory, but it helps to simplify the procedure. Alternatively, you can go step by step by yourself following the Makefile provided (the ``makefile.png`` image can help).
+4. The ``make2graph`` rule in the Makefile depicts the Makefile as a PNG picture. To use this rule, you must (1) clone the https://github.com/lindenb/makefile2graph repository into the present folder; (2) compile it with ``make``; (3) install [Graphviz](http://www.graphviz.org/) into your OS.
 
 ## Built database
 You can find a built version of the database [here](https://surfdrive.surf.nl/files/index.php/s/BgV5tAyhEjGFojk).

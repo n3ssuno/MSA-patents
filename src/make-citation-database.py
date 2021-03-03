@@ -31,21 +31,17 @@ def main():
         usecols=[
             'patent_id',
             'citation_id'], 
-        dtype=str,
-        iterator=True, 
-        chunksize=1000000)
-
+        dtype=str)
+    
     # Build the dataframe, filtering only the citations going to utility patents 
     #  located into a MSA and coming from a utility patent
     # Rename to columns so that the dataframe can be merged with the other
     #  dataframes of the MSA-patents project:
     #   - patent_id is the cited patent
     #   - forward_citation_id is the citing patent
-    df_patent_citation = pd.concat(
-        [citations_chunk[
-            (citations_chunk.citation_id.isin(msa_patents)) & \
-            (citations_chunk.patent_id.str.isnumeric())] \
-                for citations_chunk in df_patent_citation]) \
+    df_patent_citation = df_patent_citation[
+        (df_patent_citation.citation_id.isin(msa_patents)) &
+        (df_patent_citation.patent_id.str.isnumeric())] \
         .rename(columns={
             'patent_id':'forward_citation_id',
             'citation_id':'patent_id'})
