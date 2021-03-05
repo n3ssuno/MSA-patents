@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Make MSA-patent information database
+Make MSA-patent CPC database
 The database produced contains
 * patent_id       <- patent unique id (key)
 * cpc_class       <- CPC subclass; 4 digits class

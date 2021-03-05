@@ -70,13 +70,19 @@ $(DATA_DIR_PROC)/msa_label.tsv.zip: $(SCRIPT_DIR)/make-msa-label-database.py $(D
 $(DATA_DIR_PROC)/msa_citation.tsv.zip: $(SCRIPT_DIR)/make-citation-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DATA_DIR_PROC)/msa_patent_info.tsv.zip: $(SCRIPT_DIR)/make-patent-info-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
+$(DATA_DIR_PROC)/msa_patent_dates.tsv.zip: $(SCRIPT_DIR)/make-patent-dates-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip
+	python $< -I $(filter-out $<,$^) -o $@
+
+$(DATA_DIR_PROC)/msa_patent_uspc.tsv.zip: $(SCRIPT_DIR)/make-patent-uspc-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip
+	python $< -I $(filter-out $<,$^) -o $@
+
+$(DATA_DIR_PROC)/msa_patent_quality.tsv.zip: $(SCRIPT_DIR)/make-patent-quality-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
 $(DATA_DIR_PROC)/msa_patent_cpc.tsv.zip: $(SCRIPT_DIR)/make-cpc-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/cpc_current.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DOCS_DIR)/README_tables.md: $(SCRIPT_DIR)/make-readme-tables.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_patent_inventor.tsv.zip $(DATA_DIR_PROC)/msa_patent_info.tsv.zip $(DATA_DIR_PROC)/msa_label.tsv.zip $(DATA_DIR_PROC)/msa_patent_cpc.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip
+$(DOCS_DIR)/README_tables.md: $(SCRIPT_DIR)/make-readme-tables.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_patent_inventor.tsv.zip $(DATA_DIR_PROC)/msa_patent_quality.tsv.zip $(DATA_DIR_PROC)/msa_label.tsv.zip $(DATA_DIR_PROC)/msa_patent_cpc.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 README.md: $(DOCS_DIR)/README_base.md $(DOCS_DIR)/README_tables.md
 	awk '{print}' $^ > $@

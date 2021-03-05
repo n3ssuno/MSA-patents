@@ -30,25 +30,24 @@ def main():
             'inventor_id', 
             'inventor_share',
             'cbsa_id']) \
-        .drop_duplicates()
+        .drop_duplicates() \
+        .drop(columns='inventor_id') \
+        .groupby(['patent_id','cbsa_id'], as_index=False) \
+        .agg({
+            'inventor_share':'sum'}) \
+        .rename(columns={'inventor_share':'cbsa_share'})
 
     dir, file = os.path.split(args.output)
     if not os.path.exists(dir):
         os.makedirs(dir)
 
-    df_patent \
-        .drop(columns='inventor_id') \
-        .groupby(['patent_id','cbsa_id'], as_index=False) \
-        .agg({
-            'inventor_share':'sum'}) \
-        .rename(columns={'inventor_share':'cbsa_share'}) \
-        .to_csv(
-            args.output, 
-            sep='\t', 
-            index=False, 
-            compression={
-                'method':'zip',
-                'archive_name':file.replace('.zip','')})
+    df_patent.to_csv(
+        args.output, 
+        sep='\t', 
+        index=False, 
+        compression={
+            'method':'zip',
+            'archive_name':file.replace('.zip','')})
 
 
 if __name__ == '__main__':

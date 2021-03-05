@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 
 """
-Make MSA-patent information database
+Make MSA-patent quality database
 The database produced contains
 * patent_id                <- patent unique id (key)
-* grant_date               <- grant date -- YYYY-MM-DD
-* appln_date               <- application date -- YYYY-MM-DD
-* uspc_class               <- USPC main class
 * num_claims               <- number of claims
 * num_citations_5y         <- number of citations received 
                               in the 5 years following the grant year
@@ -548,9 +545,6 @@ def main():
 
     df_msa_patent = df_msa_patent[[
             'patent_id', 
-            'grant_date', 
-            'appln_date', 
-            'uspc_class',
             'num_claims',
             'num_citations_5y',
             'num_citations_10y',
