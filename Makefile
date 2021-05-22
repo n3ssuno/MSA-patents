@@ -58,6 +58,9 @@ $(SHP_TARGETS): $(DATA_DIR_SHP)/%: $(SCRIPT_DIR)/download.py
 $(DATA_DIR_INTM)/msa_patent.tsv.zip: $(SCRIPT_DIR)/make-patent-database.py $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/patent_inventor.tsv.zip $(DATA_DIR_USPTO)/location.tsv.zip $(DATA_DIR_SHP)/cb_2019_us_cbsa_20m.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
+$(DATA_DIR_INTM)/patent_info.tsv.zip: $(SCRIPT_DIR)/make-patent-info-database.py $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
+	python $< -I $(filter-out $<,$^) -o $@
+
 $(DATA_DIR_PROC)/msa_patent.tsv.zip: $(SCRIPT_DIR)/make-patent-msa-database.py $(DATA_DIR_INTM)/msa_patent.tsv.zip
 	python $< -i $(filter-out $<,$^) -o $@
 
@@ -70,13 +73,13 @@ $(DATA_DIR_PROC)/msa_label.tsv.zip: $(SCRIPT_DIR)/make-msa-label-database.py $(D
 $(DATA_DIR_PROC)/msa_citation.tsv.zip: $(SCRIPT_DIR)/make-citation-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DATA_DIR_PROC)/msa_patent_dates.tsv.zip: $(SCRIPT_DIR)/make-patent-dates-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip
+$(DATA_DIR_PROC)/msa_patent_dates.tsv.zip: $(SCRIPT_DIR)/make-patent-dates-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_INTM)/patent_info.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DATA_DIR_PROC)/msa_patent_uspc.tsv.zip: $(SCRIPT_DIR)/make-patent-uspc-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip
+$(DATA_DIR_PROC)/msa_patent_uspc.tsv.zip: $(SCRIPT_DIR)/make-patent-uspc-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_INTM)/patent_info.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
-$(DATA_DIR_PROC)/msa_patent_quality.tsv.zip: $(SCRIPT_DIR)/make-patent-quality-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/patent.tsv.zip $(DATA_DIR_USPTO)/application.tsv.zip $(DATA_DIR_PATEX)/application_data.csv.zip $(DATA_DIR_USPTO)/uspatentcitation.tsv.zip
+$(DATA_DIR_PROC)/msa_patent_quality.tsv.zip: $(SCRIPT_DIR)/make-patent-quality-database.py $(DATA_DIR_PROC)/msa_patent_dates.tsv.zip $(DATA_DIR_PROC)/msa_patent_uspc.tsv.zip $(DATA_DIR_INTM)/patent_info.tsv.zip
 	python $< -I $(filter-out $<,$^) -o $@
 
 $(DATA_DIR_PROC)/msa_patent_cpc.tsv.zip: $(SCRIPT_DIR)/make-cpc-database.py $(DATA_DIR_PROC)/msa_patent.tsv.zip $(DATA_DIR_PROC)/msa_citation.tsv.zip $(DATA_DIR_USPTO)/cpc_current.tsv.zip
