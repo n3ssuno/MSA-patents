@@ -7,7 +7,7 @@ For each patent (partly) invented in a metropolitan area, the forward citations 
 
 Of each of these patents (and citing patents), the application and publication dates, the main USPC patent class, the number of claims, and the number of citations received (*forward citations*) by other US patents (in the 5 or 10 years from the granting date) are reported.<br>
 To account for possible time- and technology-related shocks, the average number of claims and forward citations of patents belonging to the same USPC class and applied (or granted) in the same year of the focal patent are provided.<br>
-About this last poing, note that, for patents with no USPC class, the averages reported are computed considering any patent applied (or granted) in the same year of the focal patent.
+About this last point, note that, for patents with no USPC class, the averages reported are computed considering any patent applied (or granted) in the same year of the focal patent.
 
 Moreover, of each of these patents (and citing patents) the CPC *subclass* (4 digits class) are reported.<br>
 About the CPC classes, some notes need to be taken into consideration:
